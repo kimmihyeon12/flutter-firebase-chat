@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
             ),
           );
         }
+        //3초동안
         return FutureBuilder(
           future: authC.firstInitialized(),
           builder: (context, snapshot) => SplashScreen(),

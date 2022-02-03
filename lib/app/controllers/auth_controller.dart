@@ -19,6 +19,7 @@ class AuthController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<void> firstInitialized() async {
+    print("...로딩중");
     await autoLogin().then((value) {
       if (value) {
         isAuth.value = true;
@@ -126,7 +127,7 @@ class AuthController extends GetxController {
 
       if (isSignIn) {
         // kondisi login berhasil
-        print("SUDAH BERHASIL LOGIN DENGAN AKUN : ");
+        print("USER DATA");
         print(_currentUser);
 
         final googleAuth = await _currentUser!.authentication;
@@ -143,18 +144,17 @@ class AuthController extends GetxController {
         print("USER CREDENTIAL");
         print(userCredential);
 
-        // simpan status user bahwa sudah pernah login & tidak akan menampilkan introduction kembali
+        // skipintro true( skip 하도록 )
         final box = GetStorage();
         if (box.read('skipIntro') != null) {
           box.remove('skipIntro');
         }
         box.write('skipIntro', true);
 
-        // masukan data ke firebase...
         CollectionReference users = firestore.collection('users');
 
         final checkuser = await users.doc(_currentUser!.email).get();
-
+        //이메일 storage에 존재하지 않으면
         if (checkuser.data() == null) {
           await users.doc(_currentUser!.email).set({
             "uid": userCredential!.user!.uid,
@@ -171,7 +171,9 @@ class AuthController extends GetxController {
           });
 
           await users.doc(_currentUser!.email).collection("chats");
-        } else {
+        }
+        //이메일 storage에 존재하면
+        else {
           await users.doc(_currentUser!.email).update({
             "lastSignInTime": userCredential!.user!.metadata.lastSignInTime!
                 .toIso8601String(),

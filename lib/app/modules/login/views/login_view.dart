@@ -38,7 +38,7 @@ class LoginView extends GetView<LoginController> {
                         ),
                         SizedBox(width: 15),
                         Text(
-                          "Sign In with Google",
+                          "google login",
                           style: TextStyle(fontSize: 20),
                         ),
                       ],

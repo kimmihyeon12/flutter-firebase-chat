@@ -18,14 +18,14 @@ class SearchController extends GetxController {
       tempSearch.value = [];
     } else {
       var capitalized = data.substring(0, 1).toUpperCase() + data.substring(1);
-      print(capitalized);
-
+      print(email);
       if (queryAwal.length == 0 && data.length == 1) {
         // fungsi yang akan dijalankan pada 1 huruf ketikan pertama
         CollectionReference users = await firestore.collection("users");
         final keyNameResult = await users
+            // .where("keyName", arrayContainsAny: ['en', 'it'])
             .where("keyName", isEqualTo: data.substring(0, 1).toUpperCase())
-            .where("email", isNotEqualTo: email)
+            // .where("email", isNotEqualTo: email)
             .get();
 
         print("TOTAL DATA : ${keyNameResult.docs.length}");
@@ -43,6 +43,8 @@ class SearchController extends GetxController {
       if (queryAwal.length != 0) {
         tempSearch.value = [];
         queryAwal.forEach((element) {
+          print("elememt : ${element}");
+          print("capitalized : ${capitalized}");
           if (element["name"].startsWith(capitalized)) {
             tempSearch.add(element);
           }

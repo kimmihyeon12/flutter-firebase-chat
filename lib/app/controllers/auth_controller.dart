@@ -116,13 +116,8 @@ class AuthController extends GetxController {
 
   Future<void> login() async {
     try {
-      // Ini untuk handle kebocoran data user sebelum login
       await _googleSignIn.signOut();
-
-      // Ini digunakan untuk mendapatkan google account
       await _googleSignIn.signIn().then((value) => _currentUser = value);
-
-      // ini untuk mengecek status login user
       final isSignIn = await _googleSignIn.isSignedIn();
 
       if (isSignIn) {
@@ -318,7 +313,6 @@ class AuthController extends GetxController {
         await users.doc(_currentUser!.email).collection("chats").get();
 
     if (docChats.docs.length != 0) {
-      // user sudah pernah chat dengan siapapun
       final checkConnection = await users
           .doc(_currentUser!.email)
           .collection("chats")
@@ -326,11 +320,10 @@ class AuthController extends GetxController {
           .get();
 
       if (checkConnection.docs.length != 0) {
-        // sudah pernah buat koneksi dengan => friendEmail
         flagNewConnection = false;
 
         //chat_id from chats collection
-        chat_id = checkConnection.docs[0].id;
+        chat_id = checkConnection.docs[0].id; //UATUUXE...
       } else {
         // blm pernah buat koneksi dengan => friendEmail
         // buat koneksi ....
@@ -343,7 +336,6 @@ class AuthController extends GetxController {
     }
 
     if (flagNewConnection) {
-      // cek dari chats collection => connections => mereka berdua...
       final chatsDocs = await chats.where(
         "connections",
         whereIn: [
@@ -359,7 +351,6 @@ class AuthController extends GetxController {
       ).get();
 
       if (chatsDocs.docs.length != 0) {
-        // terdapat data chats (sudah ada koneksi antara mereka berdua)
         final chatDataId = chatsDocs.docs[0].id;
         final chatsData = chatsDocs.docs[0].data() as Map<String, dynamic>;
 
@@ -409,7 +400,7 @@ class AuthController extends GetxController {
           ],
         });
 
-        await chats.doc(newChatDoc.id).collection("chat");
+        // await chats.doc(newChatDoc.id).collection("chat");
 
         await users
             .doc(_currentUser!.email)
@@ -445,14 +436,15 @@ class AuthController extends GetxController {
           });
         }
 
-        chat_id = newChatDoc.id;
+        //chat_id = newChatDoc.id;
 
         user.refresh();
       }
     }
 
-    print(chat_id);
+    // print(chat_id);
 
+    //읽음표시!
     final updateStatusChat = await chats
         .doc(chat_id)
         .collection("chat")

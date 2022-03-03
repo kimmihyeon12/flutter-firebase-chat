@@ -12,6 +12,7 @@ import '../controllers/chat_room_controller.dart';
 class ChatRoomView extends GetView<ChatRoomController> {
   final authC = Get.find<AuthController>();
   final String chat_id = (Get.arguments as Map<String, dynamic>)["chat_id"];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,6 +134,7 @@ class ChatRoomView extends GetView<ChatRoomController> {
           }
           return Future.value(false);
         },
+        //
         child: Column(
           children: [
             Expanded(
